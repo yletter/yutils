@@ -3,68 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text to Base64 Converter</title>
+  <title>Custom Lowercase Encoder/Decoder</title>
   <style>
     body {
       font-family: Tahoma, sans-serif;
     }
   </style>
   <script>
-    function textToBase64(text) {
-      // Replace newline characters with a placeholder
-      const textWithoutNewlines = text.replace(/\n/g, '__newline__');
-      const base64 = btoa(textWithoutNewlines);
-      return base64;
+    function textToCustomLowerCase(text) {
+      const base64Chars = 'abcdefghijklmnopqrstuvwxyz';
+      const base64Table = Object.fromEntries(base64Chars.split('').map((char, index) => [char, index]));
+
+      const binaryArray = text.split('').map(char => {
+        const binary = char.charCodeAt(0).toString(2).padStart(8, '0');
+        return binary;
+      }).join('');
+
+      const chunks = binaryArray.match(/.{1,6}/g) || [];
+      
+      const encodedResult = chunks.map(chunk => {
+        while (chunk.length < 6) {
+          chunk += '0'; // Pad if needed
+        }
+        const index = parseInt(chunk, 2);
+        return base64Chars[index];
+      }).join('');
+
+      return encodedResult;
     }
 
-    function base64ToText(base64) {
-      const textWithoutNewlines = atob(base64);
-      // Replace the placeholder back with newline characters
-      const originalText = textWithoutNewlines.replace(/__newline__/g, '<br/>');
-      return originalText;
+    function customLowerCaseToText(encodedText) {
+      const base64Chars = 'abcdefghijklmnopqrstuvwxyz';
+      const base64Table = Object.fromEntries(base64Chars.split('').map((char, index) => [char, index]));
+
+      const binaryArray = encodedText.split('').map(char => {
+        const index = base64Chars.indexOf(char);
+        return index.toString(2).padStart(6, '0');
+      }).join('');
+
+      const chunks = binaryArray.match(/.{1,8}/g) || [];
+      
+      const decodedResult = chunks.map(chunk => String.fromCharCode(parseInt(chunk, 2))).join('');
+
+      return decodedResult;
     }
 
     function convertText() {
       const inputText = document.getElementById('textInput').value;
       
-      // Convert text to Base64
-      const base64Result = textToBase64(inputText);
-      document.getElementById('base64Output').textContent = 'Base64: ' + base64Result;
+      // Convert text using custom lowercase encoding
+      const encodedResult = textToCustomLowerCase(inputText);
+      document.getElementById('encodedOutput').textContent = 'Encoded Text: ' + encodedResult;
 
-      // Convert Base64 back to text
-      const originalText = base64ToText(base64Result);
+      // Convert custom lowercase-encoded text back to the original text
+      const originalText = customLowerCaseToText(encodedResult);
       document.getElementById('originalTextOutput').textContent = 'Original Text: ' + originalText;
     }
 
-    function convertBinary() {
-      const inputBinary = document.getElementById('binaryInput').value;
+    function convertEncoded() {
+      const inputEncoded = document.getElementById('encodedInput').value;
       
-      // Convert binary to text
-      const textResult = base64ToText(inputBinary);
-      document.getElementById('binaryToTextOutput').textContent = 'Binary to Text: ' + textResult;
+      // Convert custom lowercase-encoded text to the original text
+      const originalText = customLowerCaseToText(inputEncoded);
+      document.getElementById('encodedToTextOutput').textContent = 'Encoded to Text: ' + originalText;
     }
   </script>
 </head>
 <body>
 
-<h1>Text to Base64 Converter</h1>
+<h1>Custom Lowercase Encoder/Decoder</h1>
 
-<label for="textInput">Enter Text from Textbook:</label>
-<textarea id="textInput" placeholder="Text from textbook" rows="4" cols="50"></textarea>
+<label for="textInput">Enter Text:</label>
+<textarea id="textInput" placeholder="Enter text" rows="4" cols="50"></textarea>
 
-<button onclick="convertText()">Convert</button>
+<button onclick="convertText()">Encode</button>
 
-<p id="base64Output" style="font-family: Tahoma, sans-serif;">Base64: </p>
+<p id="encodedOutput" style="font-family: Tahoma, sans-serif;">Encoded Text: </p>
 <p id="originalTextOutput" style="font-family: Tahoma, sans-serif;">Original Text: </p>
 
 <hr>
 
-<label for="binaryInput">Enter Binary:</label>
-<textarea id="binaryInput" placeholder="Binary input" rows="4" cols="50"></textarea>
+<label for="encodedInput">Enter Encoded Text:</label>
+<textarea id="encodedInput" placeholder="Enter encoded text" rows="4" cols="50"></textarea>
 
-<button onclick="convertBinary()">Convert</button>
+<button onclick="convertEncoded()">Decode</button>
 
-<p id="binaryToTextOutput" style="font-family: Tahoma, sans-serif;">Binary to Text: </p>
+<p id="encodedToTextOutput" style="font-family: Tahoma, sans-serif;">Encoded to Text: </p>
 
 </body>
 </html>
