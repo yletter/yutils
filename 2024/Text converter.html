@@ -29,6 +29,14 @@
       const originalText = base64ToText(base64Result);
       document.getElementById('originalTextOutput').textContent = 'Original Text: ' + originalText;
     }
+
+    function convertBinary() {
+      const inputBinary = document.getElementById('binaryInput').value;
+      
+      // Convert binary to text
+      const textResult = base64ToText(inputBinary);
+      document.getElementById('binaryToTextOutput').textContent = 'Binary to Text: ' + textResult;
+    }
   </script>
 </head>
 <body>
@@ -42,6 +50,15 @@
 
 <p id="base64Output" style="font-family: Tahoma, sans-serif;">Base64: </p>
 <p id="originalTextOutput" style="font-family: Tahoma, sans-serif;">Original Text: </p>
+
+<hr>
+
+<label for="binaryInput">Enter Binary:</label>
+<textarea id="binaryInput" placeholder="Binary input" rows="4" cols="50"></textarea>
+
+<button onclick="convertBinary()">Convert</button>
+
+<p id="binaryToTextOutput" style="font-family: Tahoma, sans-serif;">Binary to Text: </p>
 
 </body>
 </html>
