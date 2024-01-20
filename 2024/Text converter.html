@@ -11,17 +11,15 @@
   </style>
   <script>
     function textToBase64(text) {
-      // Replace newline characters with a placeholder
-      const textWithoutNewlines = text.replace(/\n/g, '__newline__');
-      const base64 = btoa(textWithoutNewlines);
+      // Encode and replace newline characters
+      const base64 = btoa(text.replace(/\n/g, '\r\n'));
       return base64;
     }
 
     function base64ToText(base64) {
-      const textWithoutNewlines = atob(base64);
-      // Replace the placeholder back with newline characters
-      const originalText = textWithoutNewlines.replace(/__newline__/g, '\n');
-      return originalText;
+      // Replace newline placeholders and decode
+      const text = atob(base64).replace(/\r\n/g, '\n');
+      return text;
     }
 
     function convertText() {
