@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text to Base64 Converter</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+    }
+  </style>
+  <script>
+    function textToBase64(text) {
+      return btoa(text);
+    }
+
+    function base64ToText(base64) {
+      return atob(base64);
+    }
+
+    function convertText() {
+      const inputText = document.getElementById('textInput').value;
+      
+      // Convert text to Base64
+      const base64Result = textToBase64(inputText);
+      document.getElementById('base64Output').textContent = 'Base64: ' + base64Result;
+
+      // Convert Base64 back to text
+      const originalText = base64ToText(base64Result);
+      document.getElementById('originalTextOutput').textContent = 'Original Text: ' + originalText;
+    }
+  </script>
+</head>
+<body>
+
+<h1>Text to Base64 Converter</h1>
+
+<label for="textInput">Enter Text from Textbook:</label>
+<textarea id="textInput" placeholder="Text from textbook" rows="4" cols="50"></textarea>
+
+<button onclick="convertText()">Convert</button>
+
+<p id="base64Output" style="font-family: Tahoma, sans-serif;">Base64: </p>
+<p id="originalTextOutput" style="font-family: Tahoma, sans-serif;">Original Text: </p>
+
+</body>
+</html>
