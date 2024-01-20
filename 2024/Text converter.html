@@ -12,13 +12,13 @@
   <script>
     function textToBase64(text) {
       // Encode and replace newline characters
-      const base64 = btoa(text.replace(/\n/g, '\r\n'));
+      const base64 = btoa(unescape(encodeURIComponent(text.replace(/\n/g, '\r\n'))));
       return base64;
     }
 
     function base64ToText(base64) {
-      // Replace newline placeholders and decode
-      const text = atob(base64).replace(/\r\n/g, '\n');
+      // Replace newline placeholders, decode, and convert back to original text
+      const text = decodeURIComponent(escape(atob(base64).replace(/\r\n/g, '\n')));
       return text;
     }
 
